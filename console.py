@@ -135,15 +135,18 @@ class HBNBCommand(cmd.Cmd):
                 spl = args[i].split('=')
                 val = None
 
-                if spl[1][0] == '"' and spl[1][-1] == '"':
-                    val = spl[1][1:-1].replace('_', ' ')
-                elif spl[1].isdigit():
-                    val = int(spl[1])
-                elif spl[1].find('.') != -1:
-                    try:
-                        val = float(spl[1])
-                    except ValueError:
-                        pass
+                try:
+                    if spl[1][0] == '"' and spl[1][-1] == '"':
+                        val = spl[1][1:-1].replace('_', ' ')
+                    elif spl[1].isdigit():
+                        val = int(spl[1])
+                    elif spl[1].find('.') != -1:
+                        try:
+                            val = float(spl[1])
+                        except ValueError:
+                            pass
+                except IndexError:
+                    pass
 
                 if val:
                     setattr(new_instance, spl[0], val)
