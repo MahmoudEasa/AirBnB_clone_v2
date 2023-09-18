@@ -16,7 +16,7 @@ class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
     # determines prompt for interactive/non-interactive modes
-    prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
+    prompt = '(hbnb) '
 
     classes = {
                'BaseModel': BaseModel, 'User': User, 'Place': Place,
@@ -29,11 +29,6 @@ class HBNBCommand(cmd.Cmd):
              'max_guest': int, 'price_by_night': int,
              'latitude': float, 'longitude': float
             }
-
-    def preloop(self):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print('(hbnb) ', end='')
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
@@ -86,12 +81,6 @@ class HBNBCommand(cmd.Cmd):
         finally:
             return line
 
-    def postcmd(self, stop, line):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print('(hbnb) ', end='')
-        return stop
-
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
         exit()
@@ -137,7 +126,7 @@ class HBNBCommand(cmd.Cmd):
 
                 try:
                     if spl[1][0] == '"' and spl[1][-1] == '"':
-                        val = spl[1].strip('"').replace('_', ' ').replace("\\", '"')
+                        val = spl[1].strip('"').replace('_', ' ').replace('"', '\\"')
                     elif spl[1].isdigit():
                         val = int(spl[1])
                     elif spl[1].find('.') != -1:
