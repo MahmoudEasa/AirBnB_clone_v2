@@ -137,7 +137,7 @@ class HBNBCommand(cmd.Cmd):
 
                 try:
                     if spl[1][0] == '"' and spl[1][-1] == '"':
-                        val = spl[1][1:-1].replace('_', ' ').replace("\\", '"')
+                        val = spl[1].strip('"').replace('_', ' ').replace("\\", '"')
                     elif spl[1].isdigit():
                         val = int(spl[1])
                     elif spl[1].find('.') != -1:
