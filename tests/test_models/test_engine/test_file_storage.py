@@ -110,3 +110,8 @@ class test_fileStorage(unittest.TestCase):
     def test_do_create(self):
         """ Test do_create function in console """
         from console import HBNBCommand
+        old_len = len(storage.all())
+        HBNBCommand.do_create(self, 'State name="California"')
+        new_len = len(storage.all())
+
+        self.assertTrue(new_len > old_len)
