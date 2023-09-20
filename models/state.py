@@ -20,7 +20,7 @@ class State(BaseModel, Base):
         def cities(self):
             """ getter attribute cities that returns the list of City """
             city_list = []
-            for city in (models.storage.all(City).values()):
+            for city in list(models.storage.all(City).values()):
                 if city.state.id == self.id:
                     city_list.append(city)
             return city_list
