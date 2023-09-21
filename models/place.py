@@ -5,7 +5,7 @@ from models.amenity import Amenity
 from models.review import Review
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
-import os
+from os import getenv
 import models
 
 place_amenity = Table('place_amenity', Base.metadata,
@@ -31,25 +31,30 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
+    reviews = relationship("Review", backref="place", cascade="delete")
+    amenities = relationship("Amenity", secondary="place_amenity",
+                             viewonly=False)
     amenity_ids = []
 
-    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        amenities = relationship("Amenity", secondary=place_amenity,
-                                 viewonly=False)
-        reviews = relationship("Review", cascade="all, delete",
-                               backref="place")
+    if getenv("HBNB_TYPE_STORAGE", None) != "db":
+        @property
+        def reviews(self):
+            """Get a list of all linked Reviews."""
+            review_list = []
+            for review in list(models.storage.all(Review).values()):
+                if review.place_id == self.id:
+                    review_list.append(review)
+            return review_list
 
-    else:
         @property
         def amenities(self):
-            """Getter attribute amenities"""
-            amenity_objs = []
-            for amenity_id in self.amenity_ids:
-                amenity_obj = models.storage.get("Amenity", amenity_id)
-                if amenity_obj:
-                    amenity_objs.append(amenity_obj)
-            return amenity_objs
-
+            """Get/set linked Amenities."""
+            amenity_list = []
+            for amenity in list(models.storage.all(Amenity).values()):
+                if amenity.id in self.amenity_ids:
+                    amenity_list.append(amenity)
+            return amenity_list
+        
         @amenities.setter
         def amenities(self, obj):
             """Setter attribute amenities"""

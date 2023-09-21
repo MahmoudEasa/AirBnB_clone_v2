@@ -36,30 +36,25 @@ class DBStorage:
 
         if env == 'test':
             Base.metadata.drop_all(self.__engine)
-
+    
     def all(self, cls=None):
-        """
-        Query on the curret database session all objects of the given class.
+        """Query on the curret database session all objects of the given class.
+        If cls is None, queries all types of objects.
         Return:
-            Dict of queried classes
+            Dict of queried classes in the format <class name>.<obj id> = obj.
         """
-        objects = {}
-        classes = [User, State, City, Amenity, Place, Review]
-
-        if cls:
-            if cls in classes:
-                query = self.__session.query(cls).all()
-                for obj in query:
-                    key = f"{type(obj).__name__}.{obj.id}"
-                    objects[key] = obj
+        if cls is None:
+            objs = self.__session.query(State).all()
+            objs.extend(self.__session.query(City).all())
+            objs.extend(self.__session.query(User).all())
+            objs.extend(self.__session.query(Place).all())
+            objs.extend(self.__session.query(Review).all())
+            objs.extend(self.__session.query(Amenity).all())
         else:
-            for cls in classes:
-                query = self.__session.query(cls).all()
-                for obj in query:
-                    key = f"{type(obj).__name__}.{obj.id}"
-                    objects[key] = obj
-
-        return objects
+            if type(cls) == str:
+                cls = eval(cls)
+            objs = self.__session.query(cls)
+        return {"{}.{}".format(type(o).__name__, o.id): o for o in objs}
 
     def new(self, obj):
         """ add the object to the current database session """
