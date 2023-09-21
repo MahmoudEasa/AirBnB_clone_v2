@@ -23,6 +23,7 @@ class DBStorage:
     __session = None
 
     def __init__(self):
+        """Initialize a new DBStorage instance."""
         usr = getenv('HBNB_MYSQL_USER')
         passwd = getenv('HBNB_MYSQL_PWD')
         host = getenv('HBNB_MYSQL_HOST', default='localhost')
