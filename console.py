@@ -127,12 +127,14 @@ class HBNBCommand(cmd.Cmd):
                 try:
                     if spl[1][0] == '"' and spl[1][-1] == '"':
                         val = spl[1][1:-1].replace('_', ' ')
-                        val = val.replace('\\"', '"')
-                    elif spl[1].isdigit():
-                        val = int(spl[1])
                     elif spl[1].find('.') != -1:
                         try:
                             val = float(spl[1])
+                        except ValueError:
+                            pass
+                    else:
+                        try:
+                            val = int(spl[1])
                         except ValueError:
                             pass
                 except IndexError:
