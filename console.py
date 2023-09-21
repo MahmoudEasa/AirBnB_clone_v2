@@ -140,7 +140,7 @@ class HBNBCommand(cmd.Cmd):
                 except IndexError:
                     pass
 
-                if val:
+                if val is not None:
                     setattr(new_instance, spl[0], val)
 
         new_instance.save()
