@@ -12,7 +12,7 @@ HTML_CONTENT=\
   </body>
 </html>"
 
-CHECK_HBNB=$(cat "$SITE_FILE" | grep 'location /hbnb_static')
+CHECK_HBNB=$(grep 'location /hbnb_static' < "$SITE_FILE")
 
 sudo apt-get -y update
 sudo apt-get -y upgrade
