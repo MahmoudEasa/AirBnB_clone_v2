@@ -20,6 +20,7 @@ def del_versions(versions, number=0, loc=None):
     """Delete files from versions
     """
     versions_split = versions.split()
+    versions_split.sort()
     if number == 0:
         versions_len = len(versions_split) - 1
     else:

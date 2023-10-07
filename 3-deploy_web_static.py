@@ -18,13 +18,19 @@ env.hosts = [
 
 env.user = "ubuntu"
 env.key_filename = "~/.ssh/id_rsa"
+repeate = None
 
 
 def deploy():
     """Function to create and distributes an archive to your web servers
     """
-    path = do_pack()
-    if path is None:
-        return (False)
+    global repeate
+    global path
+
+    if repeate is None:
+        path = do_pack()
+        repeate = 1
+        if path is None:
+            return (False)
 
     return (do_deploy(path))
