@@ -26,14 +26,14 @@ def do_deploy(archive_path):
     name = archive_name.split('.')[0]
     uncompress_path = "/data/web_static/releases/{}".format(name)
     uncompress_cmd = "sudo tar -xzf /tmp/{} -C {}"\
-            .format(archive_name, uncompress_path)
+                     .format(archive_name, uncompress_path)
     create_path = "sudo mkdir -p {}".format(uncompress_path)
     remove_archive = "sudo rm -rf /tmp/{}".format(archive_name)
     move = "sudo mv {}/web_static/* {}"\
-            .format(uncompress_path, uncompress_path)
+           .format(uncompress_path, uncompress_path)
     remove_web_static = "sudo rm -rf {}/web_static".format(uncompress_path)
     link_archive = "sudo ln -s {} /data/web_static/current"\
-            .format(uncompress_path)
+                   .format(uncompress_path)
 
     if put(archive_path, '/tmp/').failed is True:
         return (False)
